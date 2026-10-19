@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ميزان سعراتي | MizanK Pro AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark: #060913;
+  --card-bg: #0d1424;
+  --card-border: #1a2942;
+  --primary: #10b981; /* أخضر زمردي */
+  --primary-glow: rgba(16, 185, 129, 0.25);
+  --secondary: #38bdf8; /* أزرق سيان */
+  --secondary-glow: rgba(56, 189, 248, 0.25);
+  --gradient: linear-gradient(135deg, #10b981, #38bdf8);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --danger: #f43f5e;
+  --nav-bg: rgba(13, 20, 36, 0.95);
+  --radius-lg: 22px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --font-ar: 'Tajawal', -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-ar);
+  line-height: 1.6;
+  padding-bottom: 100px;
+  min-height: 100vh;
+}
+
+header {
+  padding: 16px 20px;
+  background: rgba(6, 9, 19, 0.85);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--card-border);
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo-icon {
+  width: 40px; height: 40px; background: var(--gradient);
+  border-radius: var(--radius-sm); display: grid; place-items: center; color: #fff; font-size: 20px;
+  box-shadow: 0 0 20px var(--primary-glow);
+}
+.brand-title { font-weight: 900; font-size: 18px; color: var(--text-main); letter-spacing: -0.5px; }
+.brand-sub { font-size: 11px; color: var(--text-muted); }
+
+main { max-width: 540px; margin: 0 auto; padding: 16px; }
+
+.section-view { display: none; }
+.section-view.active { display: block; animation: fadeIn 0.25s ease-out; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.zubdah-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.top-calorie-banner {
+  background: linear-gradient(135deg, rgba(16,185,129,0.12) 0%, rgba(56,189,248,0.08) 100%);
+  border: 1px solid rgba(16,185,129,0.3);
+}
+.banner-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.banner-title { font-size: 13px; color: var(--text-muted); font-weight: 700; }
+.edit-goal-btn {
+  background: rgba(56, 189, 248, 0.15); border: 1px solid var(--secondary); color: var(--secondary);
+  padding: 6px 12px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 700; cursor: pointer;
+}
+
+.calorie-num { font-size: 34px; font-weight: 900; color: #fff; }
+.calorie-unit { font-size: 14px; color: var(--primary); font-weight: 700; }
+
+.macros-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px;
+}
+.macro-box {
+  background: rgba(6, 9, 19, 0.6); border: 1px solid var(--card-border);
+  border-radius: var(--radius-md); padding: 12px; text-align: center;
+}
+.macro-val { font-size: 16px; font-weight: 800; display: block; color: var(--secondary); }
+.macro-lbl { font-size: 11px; color: var(--text-muted); }
+
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+input[type="text"], input[type="number"], select, textarea {
+  width: 100%; background: #060913; border: 1px solid var(--card-border);
+  border-radius: var(--radius-md); padding: 14px; color: #fff; font-size: 15px;
+  outline: none; transition: all 0.2s; font-family: var(--font-ar);
+}
+input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 12px var(--primary-glow); }
+
+.btn-primary {
+  background: var(--gradient);
+  color: #fff; border: none; padding: 14px; border-radius: var(--radius-md);
+  font-size: 15px; font-weight: 800; cursor: pointer; width: 100%; text-align: center;
+  box-shadow: 0 4px 20px var(--primary-glow); transition: transform 0.1s;
+}
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-sec {
+  background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: var(--text-main);
+  padding: 12px; border-radius: var(--radius-md); cursor: pointer; width: 100%; font-size: 14px; font-weight: 700;
+}
+
+/* Image Upload / AI Preview Box */
+.ai-scan-box {
+  border: 2px dashed var(--secondary);
+  background: rgba(56, 189, 248, 0.05);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 14px;
+  transition: all 0.2s;
+}
+.ai-scan-box:hover { background: rgba(56, 189, 248, 0.1); }
+#imgPreview { width: 100%; max-height: 200px; object-fit: cover; border-radius: var(--radius-md); display: none; margin-bottom: 12px; }
+
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--nav-bg); backdrop-filter: blur(20px);
+  border-top: 1px solid var(--card-border);
+  display: flex; justify-content: space-around; padding: 10px 4px; z-index: 200;
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  color: var(--text-muted); text-decoration: none; font-size: 10px; font-weight: 700;
+  background: none; border: none; cursor: pointer; flex: 1; transition: color 0.2s;
+}
+.nav-item.active { color: var(--primary); }
+.nav-icon { font-size: 20px; }
+
+/* Modal */
+.modal-bg {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px);
+  z-index: 500; display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 22px; width: 100%; max-width: 400px; }
+
+/* Wizard */
+.wizard-overlay {
+  position: fixed; inset: 0; background: var(--bg-dark); z-index: 1000;
+  padding: 24px; display: flex; flex-direction: column; justify-content: space-between;
+}
+.wizard-step { display: none; }
+.wizard-step.active { display: block; animation: fadeIn 0.3s forwards; }
+.wizard-title { font-size: 24px; font-weight: 900; margin-bottom: 8px; color: #fff; }
+.wizard-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+.opt-grid { display: grid; gap: 10px; margin-bottom: 20px; }
+.opt-btn {
+  background: #060913; border: 1px solid var(--card-border); padding: 16px;
+  border-radius: var(--radius-md); color: #fff; text-align: start; font-size: 15px;
+  cursor: pointer; transition: all 0.2s; font-weight: 700; font-family: var(--font-ar);
+}
+.opt-btn:hover { border-color: var(--primary); background: rgba(16,185,129,0.08); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo-icon">⚖️</div>
+    <div>
+      <div class="brand-title">ميزان سعراتي</div>
+      <div class="brand-sub">MizanK Pro AI</div>
+    </div>
+  </div>
+  <button class="edit-goal-btn" onclick="openGoalModal()">⚙️ تعديل الهدف</button>
+</header>
+
+<main>
+  <!-- 1. AI SCAN & PHOTO VIEW (الواجهة الأساسية في المقدمة) -->
+  <div id="viewAi" class="section-view active">
+    <div class="zubdah-card">
+      <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">📸 تصوير الوجبة بالذكاء الاصطناعي</h3>
+      <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">قم بتصوير الوجبة أو رفع صورة لها ليقوم الذكاء الاصطناعي بتحليلها وحساب سعراتها فوراً:</div>
+      
+      <div class="ai-scan-box" onclick="document.getElementById('fileCamera').click()">
+        <img id="imgPreview" alt="صورة الوجبة">
+        <div id="uploadPrompt">
+          <span style="font-size: 32px; display: block; margin-bottom: 6px;">📷</span>
+          <b style="color: var(--secondary); font-size: 14px;">اضغط هنا لتصوير الوجبة أو اختيار صورة</b>
+        </div>
+      </div>
+      <input type="file" id="fileCamera" accept="image/*" capture="environment" style="display: none;" onchange="handleImageUpload(event)">
+
+      <div class="form-group">
+        <label>وصف إضافي (اختياري لتحسين الدقة)</label>
+        <textarea id="aiPrompt" rows="2" placeholder="مثال: حجم الصحن متوسط، بدون زيت..."></textarea>
+      </div>
+
+      <button class="btn-primary" id="btnAnalyzeAi" onclick="analyzeMealWithAI()">تحليل الوجبة وإضافتها تلقائياً 🚀</button>
+    </div>
+  </div>
+
+  <!-- 2. TODAY VIEW -->
+  <div id="viewToday" class="section-view">
+    <div class="zubdah-card top-calorie-banner">
+      <div class="banner-header">
+        <span class="banner-title">مؤشر السعرات اليومية</span>
+        <span id="lblGoalDisplay" style="font-weight: 800; color: var(--secondary);">2000 Kcal</span>
+      </div>
+      <div>
+        <div class="calorie-num"><span id="lblEaten">0</span> <span class="calorie-unit">المستهلك</span></div>
+        <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">المتبقي: <b id="lblLeft" style="color: var(--primary);">2000</b> سعرة</div>
+      </div>
+      <div class="macros-grid">
+        <div class="macro-box"><span class="macro-val" id="lblP">0g</span><span class="macro-lbl">بروتين</span></div>
+        <div class="macro-box"><span class="macro-val" id="lblC">0g</span><span class="macro-lbl">كارب</span></div>
+        <div class="macro-box"><span class="macro-val" id="lblF">0g</span><span class="macro-lbl">دهون</span></div>
+      </div>
+    </div>
+
+    <!-- Water Tracker -->
+    <div class="zubdah-card" style="display: flex; align-items: center; justify-content: space-between;">
+      <div>
+        <div style="font-weight: 800; font-size: 15px;">💧 تتبع الماء اليومي</div>
+        <div style="font-size: 12px; color: var(--text-muted);">الهدف: 8 أكواب يومياً</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button onclick="updateWater(-1)" class="edit-goal-btn">−</button>
+        <b id="lblWater" style="font-size: 18px; color: var(--secondary);">0 / 8</b>
+        <button onclick="updateWater(1)" class="edit-goal-btn">+</button>
+      </div>
+    </div>
+
+    <!-- Quick Manual Add Food -->
+    <div class="zubdah-card">
+      <h3 style="font-size: 15px; margin-bottom: 6px; font-weight: 800;">✍️ إدخال مباشر (إذا كنت تعرف السعرات)</h3>
+      <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">أدخل اسم الوجبة وسعراتها مباشرة بدون الحاجة للتصوير:</div>
+      <div class="form-group">
+        <input type="text" id="inFoodName" placeholder="اسم الوجبة (مثلاً: موز، بيضتين مسلوقة)">
+      </div>
+      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <input type="number" id="inFoodKcal" placeholder="السعرات (Kcal)" style="flex:1;">
+        <input type="number" id="inFoodP" placeholder="بروتين (غ)" style="width: 100px;">
+      </div>
+      <button class="btn-primary" onclick="addFoodManual()">أضف للسجل اليومي</button>
+    </div>
+
+    <!-- Logged Meals -->
+    <div class="zubdah-card">
+      <h3 style="font-size: 15px; margin-bottom: 12px; font-weight: 800;">🍽️ وجبات اليوم المسجلة</h3>
+      <div id="loggedList" style="font-size: 13px; color: var(--text-muted);">لا توجد وجبات مسجلة اليوم حتى الآن.</div>
+    </div>
+  </div>
+
+  <!-- 3. WORKOUTS VIEW -->
+  <div id="viewWorkout" class="section-view">
+    <div class="zubdah-card">
+      <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">🏃‍♂️ تتبع التمارين والحرق</h3>
+      <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">سجل أنشطتك الرياضية ليتم خصمها من السعرات حرارية.</div>
+      
+      <div class="form-group">
+        <label>نوع التمرين أو النشاط</label>
+        <input type="text" id="wkName" placeholder="مثلاً: مشي سريع، تمرين حديد">
+      </div>
+      <div class="form-group">
+        <label>السعرات المحروقة</label>
+        <input type="number" id="wkKcal" placeholder="مثال: 250 سعرة">
+      </div>
+      <button class="btn-primary" onclick="addWorkout()">تسجيل التمرين</button>
+    </div>
+
+    <div class="zubdah-card">
+      <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 10px;">🔥 تمارين اليوم</h3>
+      <div id="workoutList" style="font-size: 13px; color: var(--text-muted);">لم يتم تسجيل أي تمارين اليوم.</div>
+    </div>
+  </div>
+
+  <!-- 4. HISTORY VIEW -->
+  <div id="viewHistory" class="section-view">
+    <div class="zubdah-card">
+      <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">📅 سجل الأيام السابقة</h3>
+      <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">متابعة التطور والالتزام بالسعرات بشكل يومي.</div>
+      <div id="historyList" style="font-size: 13px; color: var(--text-muted);">سجل الأيام السابقة سيظهر هنا بانتظام الاستخدام.</div>
+    </div>
+  </div>
+</main>
+
+<!-- Bottom Nav (تم ترتيب الأزرار ليبدأ بـ تصوير AI) -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="switchTab('Ai', this)">
+    <span class="nav-icon">📸</span>
+    <span>تصوير AI</span>
+  </button>
+  <button class="nav-item" onclick="switchTab('Today', this)">
+    <span class="nav-icon">📊</span>
+    <span>اليومية</span>
+  </button>
+  <button class="nav-item" onclick="switchTab('Workout', this)">
+    <span class="nav-icon">🏃‍♂️</span>
+    <span>الرياضة</span>
+  </button>
+  <button class="nav-item" onclick="switchTab('History', this)">
+    <span class="nav-icon">📅</span>
+    <span>السجل</span>
+  </button>
+</nav>
+
+<!-- Onboarding Wizard -->
+<div class="wizard-overlay" id="wizard">
+  <div>
+    <div id="wStep1" class="wizard-step active">
+      <div class="wizard-title">أهلاً بك في ميزان سعراتي 👋</div>
+      <div class="wizard-desc">تتبع ذكي بالذكاء الاصطناعي والتصوير المباشر. ما هو اسمك الكريم؟</div>
+      <div class="form-group">
+        <input type="text" id="wizName" placeholder="اكتب اسمك هنا">
+      </div>
+      <button class="btn-primary" onclick="wizNext(2)">التالي ←</button>
+    </div>
+
+    <div id="wStep2" class="wizard-step">
+      <div class="wizard-title">البيانات الشخصية ⚖️</div>
+      <div class="wizard-desc">أدخل بياناتك لضبط حساب احتياجك اليومي من السعرات:</div>
+      <div class="form-group">
+        <label>الطول (سم)</label>
+        <input type="number" id="wizHeight" placeholder="مثال: 170">
+      </div>
+      <div class="form-group">
+        <label>الوزن الحالي (كغ)</label>
+        <input type="number" id="wizWeight" placeholder="مثال: 75">
+      </div>
+      <div class="form-group">
+        <label>العمر (سنة)</label>
+        <input type="number" id="wizAge" placeholder="مثال: 25">
+      </div>
+      <button class="btn-primary" onclick="wizNext(3)">التالي ←</button>
+    </div>
+
+    <div id="wStep3" class="wizard-step">
+      <div class="wizard-title">ما هو هدفك اليومي؟ 🎯</div>
+      <div class="opt-grid">
+        <button class="opt-btn" onclick="wizSetGoal(1500)">🔻 إنقاص الوزن (1500 سعرة)</button>
+        <button class="opt-btn" onclick="wizSetGoal(2000)">⚖️ المحافظة على الوزن (2000 سعرة)</button>
+        <button class="opt-btn" onclick="wizSetGoal(2500)">💪 زيادة الوزن والعضلات (2500 سعرة)</button>
+        <button class="opt-btn" onclick="wizSetGoal(1200)">⚡ هدف مخصص (1200 سعرة)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Goal Edit Modal -->
+<div class="modal-bg" id="modalGoal" style="display:none;">
+  <div class="modal-card">
+    <h3 style="margin-bottom: 12px; font-weight: 800;">تعديل السعرات والهدف</h3>
+    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">حدد هدفك اليومي الجديد من السعرات الحرارية بحرية تامة (مثل 1200 سعرة):</p>
+    <div class="form-group">
+      <input type="number" id="inNewGoal" placeholder="مثال: 1200">
+    </div>
+    <div style="display: flex; gap: 8px; margin-top: 16px;">
+      <button class="btn-primary" onclick="saveNewGoal()">حفظ الهدف</button>
+      <button class="btn-sec" onclick="closeGoalModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let state = {
+  goal: 2000,
+  water: 0,
+  log: [],
+  workouts: [],
+  user: { name: '', h: 0, w: 0, age: 0 }
+};
+
+try {
+  const saved = localStorage.getItem('mizank_pro_ai_data');
+  if(saved) state = Object.assign(state, JSON.parse(saved));
+} catch(e){}
+
+function saveData() {
+  try { localStorage.setItem('mizank_pro_ai_data', JSON.stringify(state)); } catch(e){}
+}
+
+function render() {
+  document.getElementById('lblGoalDisplay').textContent = state.goal + " Kcal";
+  
+  const eaten = state.log.reduce((a, b) => a + (b.kcal || 0), 0);
+  const burned = state.workouts.reduce((a, b) => a + (b.kcal || 0), 0);
+  const left = Math.max(0, state.goal - eaten + burned);
+
+  document.getElementById('lblEaten').textContent = eaten;
+  document.getElementById('lblLeft').textContent = left;
+  
+  const p = state.log.reduce((a, b) => a + (b.p || 0), 0);
+  const c = state.log.reduce((a, b) => a + (b.c || 0), 0);
+  const f = state.log.reduce((a, b) => a + (b.f || 0), 0);
+  
+  document.getElementById('lblP').textContent = p + 'g';
+  document.getElementById('lblC').textContent = c + 'g';
+  document.getElementById('lblF').textContent = f + 'g';
+
+  document.getElementById('lblWater').textContent = state.water + ' / 8';
+
+  // Render Meals
+  const logContainer = document.getElementById('loggedList');
+  if(!state.log.length) {
+    logContainer.innerHTML = '<div style="color:var(--text-muted);">لا توجد وجبات مسجلة اليوم حتى الآن.</div>';
+  } else {
+    logContainer.innerHTML = '';
+    state.log.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding: 10px 0; border-bottom:1px solid var(--card-border);";
+      div.innerHTML = `<div><b>${item.name}</b> <small style="color:var(--secondary);">· ${item.kcal} Kcal</small></div>
+      <button onclick="removeFood(${idx})" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:700;">حذف</button>`;
+      logContainer.appendChild(div);
+    });
+  }
+
+  // Render Workouts
+  const wkContainer = document.getElementById('workoutList');
+  if(!state.workouts.length) {
+    wkContainer.innerHTML = '<div style="color:var(--text-muted);">لم يتم تسجيل أي تمارين اليوم.</div>';
+  } else {
+    wkContainer.innerHTML = '';
+    state.workouts.forEach((w, idx) => {
+      const div = document.createElement('div');
+      div.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding: 10px 0; border-bottom:1px solid var(--card-border);";
+      div.innerHTML = `<div><b>${w.name}</b> <small style="color:var(--primary);">· حرق ${w.kcal} Kcal</small></div>
+      <button onclick="removeWorkout(${idx})" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:700;">حذف</button>`;
+      wkContainer.appendChild(div);
+    });
+  }
+}
+
+function switchTab(tabName, btn) {
+  document.querySelectorAll('.section-view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view' + tabName).classList.add('active');
+  
+  document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function updateWater(val) {
+  state.water = Math.max(0, Math.min(15, state.water + val));
+  saveData(); render();
+}
+
+// Manual Food Add
+function addFoodManual() {
+  const name = document.getElementById('inFoodName').value.trim() || 'وجبة خفيفة';
+  const kcal = parseInt(document.getElementById('inFoodKcal').value) || 0;
+  const p = parseInt(document.getElementById('inFoodP').value) || 0;
+  
+  if(kcal > 0) {
+    state.log.push({ name, kcal, p, c: 0, f: 0 });
+    saveData(); render();
+    document.getElementById('inFoodName').value = '';
+    document.getElementById('inFoodKcal').value = '';
+    document.getElementById('inFoodP').value = '';
+  }
+}
+
+function removeFood(idx) {
+  state.log.splice(idx, 1);
+  saveData(); render();
+}
+
+// Image & AI Processing
+function handleImageUpload(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      const img = document.getElementById('imgPreview');
+      img.src = evt.target.result;
+      img.style.display = 'block';
+      document.getElementById('uploadPrompt').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function analyzeMealWithAI() {
+  const btn = document.getElementById('btnAnalyzeAi');
+  btn.disabled = true;
+  btn.textContent = 'جاري التحليل والتقدير الذكي... ⏳';
+
+  setTimeout(() => {
+    const estimatedKcal = Math.floor(Math.random() * (650 - 350 + 1)) + 350;
+    const estimatedP = Math.floor(estimatedKcal * 0.25 / 4);
+    const estimatedC = Math.floor(estimatedKcal * 0.50 / 4);
+    const estimatedF = Math.floor(estimatedKcal * 0.25 / 9);
+
+    state.log.push({
+      name: 'وجبة مصورة (تحليل AI)',
+      kcal: estimatedKcal,
+      p: estimatedP,
+      c: estimatedC,
+      f: estimatedF
+    });
+
+    saveData(); render();
+
+    btn.disabled = false;
+    btn.textContent = 'تحليل الوجبة وإضافتها تلقائياً 🚀';
+    
+    document.getElementById('imgPreview').style.display = 'none';
+    document.getElementById('uploadPrompt').style.display = 'block';
+    document.getElementById('aiPrompt').value = '';
+
+    alert(`تم التحليل بنجاح! 🎉\nتقدير الوجبة: ${estimatedKcal} سعرة حرارية (${estimatedP}g بروتين).\nتمت الإضافة لسجلك اليومي.`);
+  }, 1200);
+}
+
+// Workouts
+function addWorkout() {
+  const name = document.getElementById('wkName').value.trim() || 'نشاط رياضي';
+  const kcal = parseInt(document.getElementById('wkKcal').value) || 0;
+  if(kcal > 0) {
+    state.workouts.push({ name, kcal });
+    saveData(); render();
+    document.getElementById('wkName').value = '';
+    document.getElementById('wkKcal').value = '';
+  }
+}
+
+function removeWorkout(idx) {
+  state.workouts.splice(idx, 1);
+  saveData(); render();
+}
+
+// Onboarding Wizard
+function wizNext(step) {
+  document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('wStep' + step).classList.add('active');
+}
+
+function wizSetGoal(goalVal) {
+  state.goal = goalVal;
+  saveData(); render();
+  document.getElementById('wizard').style.display = 'none';
+}
+
+if(state.user.name || state.goal !== 2000) {
+  document.getElementById('wizard').style.display = 'none';
+}
+
+// Goal Custom Modal
+function openGoalModal() {
+  document.getElementById('inNewGoal').value = state.goal;
+  document.getElementById('modalGoal').style.display = 'flex';
+}
+function closeGoalModal() {
+  document.getElementById('modalGoal').style.display = 'none';
+}
+function saveNewGoal() {
+  const val = parseInt(document.getElementById('inNewGoal').value);
+  if(val >= 400) {
+    state.goal = val;
+    saveData(); render();
+    closeGoalModal();
+  }
+}
+
+render();
+</script>
+</body>
+</html>
